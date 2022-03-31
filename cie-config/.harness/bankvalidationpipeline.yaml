@@ -1,0 +1,61 @@
+pipeline:
+    name: bankvalidation-pipeline
+    identifier: bankvalidationpipeline
+    allowStageExecutions: false
+    projectIdentifier: Bootcamp_Jon
+    orgIdentifier: Evilcorp
+    tags: {}
+    stages:
+        - stage:
+              name: Approval
+              identifier: Approval
+              description: ""
+              type: Approval
+              spec:
+                  execution:
+                      steps:
+                          - step:
+                                name: Approval
+                                identifier: approval
+                                type: HarnessApproval
+                                timeout: 1d
+                                spec:
+                                    approvalMessage: |-
+                                        Please review the following information
+                                        and approve the pipeline progression
+                                    includePipelineExecutionHistory: true
+                                    approvers:
+                                        minimumCount: 1
+                                        disallowPipelineExecutor: false
+                                        userGroups:
+                                            - account.HarnessLabUser
+                                    approverInputs: []
+              tags: {}
+              failureStrategies: []
+        - stage:
+              name: Feature Flag
+              identifier: Feature_Flag
+              description: ""
+              type: FeatureFlag
+              spec:
+                  execution:
+                      steps:
+                          - step:
+                                type: FlagConfiguration
+                                name: Enable Flag
+                                identifier: Enable_Flag
+                                spec:
+                                    feature: bankvalidation
+                                    environment: GKEDEV
+                                    instructions:
+                                        - identifier: SetFeatureFlagStateIdentifier
+                                          type: SetFeatureFlagState
+                                          spec:
+                                              state: "on"
+                                        - identifier: SetVariationForTarget
+                                          type: AddTargetsToVariationTargetMap
+                                          spec:
+                                              variation: "true"
+                                              targets:
+                                                  - jzuijlek
+                                timeout: 10m
