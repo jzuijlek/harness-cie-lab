@@ -1,0 +1,23 @@
+connector:
+  name: GitHub-CIE-Lab
+  identifier: GitHubCIELab
+  description:
+  orgIdentifier: Evilcorp
+  projectIdentifier: Bootcamp_Jon
+  type: Github
+  spec:
+    url: https://github.com/jzuijlek
+    validationRepo: harness-cie-lab
+    authentication:
+      type: Http
+      spec:
+        type: UsernameToken
+        spec:
+          username: jzuijlek
+          tokenRef: GitHubjzuijlekaccesstoken
+    apiAccess:
+      type: Token
+      spec:
+        tokenRef: GitHubjzuijlekaccesstoken
+    executeOnDelegate: true
+    type: Account
